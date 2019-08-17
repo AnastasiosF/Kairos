@@ -1,7 +1,6 @@
-package com.tasos.kairos.data
+package com.tasos.kairos.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.tasos.kairos.data.network.ConnectivityInterceptor
 import com.tasos.kairos.data.network.response.CurrentWeatherResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
@@ -24,7 +23,7 @@ interface ApixuWeatherApiService {
     ): Deferred<CurrentWeatherResponse>
 //Karfwnw to api key sto url
     companion object{
-        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): ApixuWeatherApiService{
+        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): ApixuWeatherApiService {
             val requestInterceptor = Interceptor{chain->
                 val url =chain.request()
                     .url()
@@ -41,7 +40,7 @@ interface ApixuWeatherApiService {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
-                .addInterceptor(connectivityInterceptor)
+                .addInterceptor(connectivityInterceptor) // Elegxei an uparxei sundesh sto internet
                 .build()
 
             return Retrofit.Builder()
