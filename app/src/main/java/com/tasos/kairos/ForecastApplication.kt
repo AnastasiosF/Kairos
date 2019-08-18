@@ -1,9 +1,12 @@
 package com.tasos.kairos
 
 import android.app.Application
+import android.preference.PreferenceManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.tasos.kairos.data.db.ForecastDatabase
 import com.tasos.kairos.data.network.*
+import com.tasos.kairos.data.provider.UnitProvider
+import com.tasos.kairos.data.provider.UnitProviderImpl
 import com.tasos.kairos.data.repository.ForecastRepository
 import com.tasos.kairos.data.repository.ForecastRepositoryImpl
 import com.tasos.kairos.ui.weather.current.CurrentWeatherViewModelFactory
@@ -41,13 +44,19 @@ class ForecastApplication: Application(),KodeinAware {
         bind<ForecastRepository>() with singleton{
             ForecastRepositoryImpl(instance(),instance())
         }
+        bind<UnitProvider>() with singleton{
+            UnitProviderImpl(instance())
+        }
+
         bind() from provider{
-            CurrentWeatherViewModelFactory(instance())
+            CurrentWeatherViewModelFactory(instance(),instance())
         }
     }
 
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
+        //Set defaultvalues for preferences
+        PreferenceManager.setDefaultValues(this,R.xml.preferences,false)
     }
 }

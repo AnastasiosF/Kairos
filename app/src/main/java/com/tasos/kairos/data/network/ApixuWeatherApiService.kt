@@ -21,7 +21,7 @@ interface ApixuWeatherApiService {
         @Query("q") location:String,
         @Query("lang") languageCode:String = "en"
     ): Deferred<CurrentWeatherResponse>
-//Karfwnw to api key sto url
+    //Karfwnw to api key sto url
     companion object{
         operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): ApixuWeatherApiService {
             val requestInterceptor = Interceptor{chain->
