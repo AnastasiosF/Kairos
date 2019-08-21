@@ -5,6 +5,8 @@ import android.preference.PreferenceManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.tasos.kairos.data.db.ForecastDatabase
 import com.tasos.kairos.data.network.*
+import com.tasos.kairos.data.provider.LocationProvider
+import com.tasos.kairos.data.provider.LocationProviderImpl
 import com.tasos.kairos.data.provider.UnitProvider
 import com.tasos.kairos.data.provider.UnitProviderImpl
 import com.tasos.kairos.data.repository.ForecastRepository
@@ -29,6 +31,10 @@ class ForecastApplication: Application(),KodeinAware {
         bind() from singleton {
             instance<ForecastDatabase>().currentWeatherDao()
         }
+        bind() from singleton {
+            instance<ForecastDatabase>().weatherLocationDao()
+        }
+
 
         bind<ConnectivityInterceptor>() with singleton{
             ConnectivityInterceptorImpl(instance())
@@ -40,9 +46,12 @@ class ForecastApplication: Application(),KodeinAware {
         bind<WeatherNetworkDataSource>() with singleton{
             WeatherNetworkDataSourceImpl(instance())
         }
+        bind<LocationProvider>() with singleton {
+            LocationProviderImpl()
+        }
 
         bind<ForecastRepository>() with singleton{
-            ForecastRepositoryImpl(instance(),instance())
+            ForecastRepositoryImpl(instance(),instance(),instance(),instance())
         }
         bind<UnitProvider>() with singleton{
             UnitProviderImpl(instance())
